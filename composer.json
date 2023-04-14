@@ -1,5 +1,5 @@
 {
-    "name": "terp/rpc",
+    "name": "kkguan/terp-rpc",
     "description": "Package description here.",
     "license": "MIT",
     "require": {
