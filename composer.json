@@ -4,19 +4,20 @@
     "license": "MIT",
     "require": {
         "php": ">=7.2",
-        "ext-json": "*"
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^6.3|^7.0"
     },
     "autoload": {
         "files": [
             "src/Kernel/Functions.php"
         ],
         "psr-4": {
-            "Kkguan\\TerpRpc\\": "src"
+            "KkErpService\\RpcUtils\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Kkguan\\TerpRpc\\Test\\": "tests/"
+            "KkErpService\\RpcUtils\\Test\\": "tests/"
         }
     },
     "require-dev": {
