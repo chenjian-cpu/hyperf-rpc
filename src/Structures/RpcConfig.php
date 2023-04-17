@@ -9,7 +9,9 @@ namespace KkErpService\RpcUtils\Structures;
 
 class RpcConfig
 {
-    public $host;
+    public $baseUri;
 
-    public $jsonrpc="2.0";
+    public $headers = [
+        'Content-Type' => 'application/rpc',
+    ];
 }

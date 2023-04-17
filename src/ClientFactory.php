@@ -15,6 +15,7 @@ use KkErpService\RpcUtils\Packer\PackerInterface;
 use KkErpService\RpcUtils\Packer\PhpSerializerPacker;
 use KkErpService\RpcUtils\Structures\AbstractDTO;
 use KkErpService\RpcUtils\Structures\RpcConfig;
+use KkErpService\RpcUtils\Structures\RpcServerName;
 
 class ClientFactory
 {
@@ -36,7 +37,8 @@ class ClientFactory
     {
         $this->rpcConfig = $rpcConfig;
         $this->client = new Client([
-            'base_uri' => $rpcConfig->host,
+            'base_uri' => $rpcConfig->baseUri,
+            'headers' => $rpcConfig->headers,
         ]);
     }
 
@@ -46,27 +48,14 @@ class ClientFactory
         return $this;
     }
 
-    /**
-     * @param mixed $path
-     */
-    public function setPath($path): self
-    {
-        $this->path = $path;
-        return $this;
-    }
-
-    public function request(AbstractDTO $dto)
+    public function request(RpcServerName $server, AbstractDTO $dto)
     {
         try {
             $startTime = microtime(true);
-            $id = uniqid('rpc_', true);
+            $id = uniqid('rpc_', false);
             $packer = new $this->packer();
-            $body = $packer->pack(DataFormatter::formatRequest([$this->path, [$dto], $id]));
+            $body = $packer->pack(DataFormatter::formatRequest([$server->getPath(), [$dto], $id]));
             $response = $this->client->post('', [
-                RequestOptions::HEADERS => [
-                    'Content-Type' => 'application/rpc',
-                ],
-                RequestOptions::HTTP_ERRORS => false,
                 RequestOptions::BODY => $body,
             ]);
             if ($response->getStatusCode() != 200) {
@@ -85,7 +74,7 @@ class ClientFactory
                     'line' => $throwable->getLine(),
                 ];
             }
-            $this->log($id, $this->path, $body, $content, $startTime);
+            $this->log($id, $server->getPath(), $body, $content, $startTime);
         }
     }
 

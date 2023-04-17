@@ -25,7 +25,6 @@ class DataFormatter
 
     public static function formatResponse($data)
     {
-        var_dump($data);
         if (array_key_exists('result', $data)) {
             if ($data['result'] === null) {
                 return null;
